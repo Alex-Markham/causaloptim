@@ -37,11 +37,11 @@ A list with all the paths or a list with NULL if there are none
 #> [1] "X -> Y"      "X -> Z -> Y"
  igraph::all_simple_paths(b, "X", "Y", mode = "out")
 #> [[1]]
-#> + 3/4 vertices, named, from 47f3bc2:
+#> + 3/4 vertices, named, from 04e9bea:
 #> [1] X Z Y
 #> 
 #> [[2]]
-#> + 2/4 vertices, named, from 47f3bc2:
+#> + 2/4 vertices, named, from 04e9bea:
 #> [1] X Y
 #> 
 ```

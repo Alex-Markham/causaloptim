@@ -286,8 +286,8 @@ vertices. Consequently, we have
 \begin{align*}
 \min_q ACE_q(X\rightarrow Y)
 &=\min\{c^Tq\mid q\in\mathbb{R}^{16},q\geq0_{16\times1},1_{1\times16} q=1,Rq=p\}\\
-&=\max\{\begin{pmatrix}1&p^T\end{pmatrix}y\mid y\in\mathbb{R}^{9},y\geq0_{9\times1},\begin{pmatrix}1_{16\times1}&R^T\end{pmatrix}\leq c\}\\
-&=\max\{\begin{pmatrix}1&p^T\end{pmatrix}\bar{y}\mid\bar{y}\text{ is a vertex of }\{y\in\mathbb{R}^{9}\mid y\geq0_{9\times1},\begin{pmatrix}1_{16\times1}&R^T\end{pmatrix}\leq c\}\}
+&=\max\{\begin{pmatrix}1&p^T\end{pmatrix}y\mid y\in\mathbb{R}^{9},y\geq0_{9\times1},\begin{pmatrix}1_{16\times1}&R^T\end{pmatrix}y\leq c\}\\
+&=\max\{\begin{pmatrix}1&p^T\end{pmatrix}\bar{y}\mid\bar{y}\text{ is a vertex of }\{y\in\mathbb{R}^{9}\mid y\geq0_{9\times1},\begin{pmatrix}1_{16\times1}&R^T\end{pmatrix}y\leq c\}\}
 \end{align*}
 ```
 Since we allow the user to provide additional linear inequality

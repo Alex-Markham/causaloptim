@@ -1,6 +1,7 @@
 # causaloptim 1.0.2
 
 - Bugfix: fixed addition/subtraction of complex queries. Thanks @SinaAkbarii
+- Fix typo in speed vignette
 
 # causaloptim 1.0.1
 
