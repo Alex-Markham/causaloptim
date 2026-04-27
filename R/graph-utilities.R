@@ -266,7 +266,7 @@ vertexnamecheck <- function(graphres) {
 #' graphres <- graph_from_literal(X -+ Y, X -+ M, M -+ Y, Ul -+ X, Ur -+ M, Ur -+ Y)
 #' cyclecheck(graphres = graphres) # TRUE
 cyclecheck <- function(graphres) {
-    if (is.dag(graph = graphres)) {
+    if (is_dag(graph = graphres)) {
         return(TRUE)
     }
     error_message <- "No cycles in the graph are allowed!"

@@ -1,0 +1,48 @@
+# Update the effect in a linearcausalproblem object
+
+If you want to use the same graph and response function, but change the
+effect of interest, this can save some computation time.
+
+## Usage
+
+``` r
+update_effect(obj, effectt)
+```
+
+## Arguments
+
+- obj:
+
+  An object as returned by
+  [analyze_graph](https://sachsmc.github.io/causaloptim/reference/analyze_graph.md)
+
+- effectt:
+
+  A character string that represents the causal effect of interest
+
+## Value
+
+A object of class linearcausalproblem, see
+[analyze_graph](https://sachsmc.github.io/causaloptim/reference/analyze_graph.md)
+for details
+
+## Examples
+
+``` r
+b <- igraph::graph_from_literal(X -+ Y, X -+ M, M -+ Y, Ul -+ X, Ur -+ Y, Ur -+ M)
+V(b)$leftside <- c(1, 0, 0, 1, 0)
+V(b)$latent <- c(0, 0, 0, 1, 1)
+V(b)$nvals <- c(2, 2, 2, 2, 2)
+E(b)$rlconnect <- c(0, 0, 0, 0, 0, 0)
+E(b)$edge.monotone <- c(0, 0, 0, 0, 0, 0)
+CDE0_query <- "p{Y(M = 0, X = 1) = 1} - p{Y(M = 0, X = 0) = 1}"
+CDE0_obj <- analyze_graph(b, constraints = NULL, effectt = CDE0_query)
+CDE0_bounds <- optimize_effect_2(CDE0_obj)
+CDE0_boundsfunction <- interpret_bounds(bounds = CDE0_bounds$bounds, 
+parameters = CDE0_obj$parameters)
+CDE1_query <- "p{Y(M = 1, X = 1) = 1} - p{Y(M = 1, X = 0) = 1}"
+CDE1_obj <- update_effect(CDE0_obj, effectt = CDE1_query)
+CDE1_bounds <- optimize_effect_2(CDE1_obj)
+CDE1_boundsfunction <- interpret_bounds(bounds = CDE1_bounds$bounds, 
+parameters = CDE1_obj$parameters)
+```

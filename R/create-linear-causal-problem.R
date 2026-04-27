@@ -155,48 +155,74 @@ create_linearcausalproblem <- function(causal_model, effectt) {
     if(length(var.eff) > 1 & is.null(effect$oper) | (length(effect$oper) != length(var.eff) -1)){
         stop("Missing operator")
     }
+    c0 <- as.matrix(as.integer(variables %in% objective[[1]]))
     
     if(!is.null(effect$oper) & length(effect$oper) > 0) {
-        curreff <- 2
-        for(opp in 1:length(effect$oper)) {
-            
-            if(effect$oper[[opp]] == "-") {
-                
-                resss <- symb.subtract(objective[[curreff - 1]], var.eff[[curreff]])
-                objective[[curreff - 1]] <- resss[[1]]
-                objective[[curreff]] <- resss[[2]]
-                curreff <- curreff + 1
-                
-            } else if(effect$oper[[opp]] == "+") {
-                
-                objective[[curreff]] <- var.eff[[curreff]]
-                curreff <- curreff + 1
-                
+        
+        var.eff.bin <- vector(mode = "list", length = length(var.eff))
+        for(i in seq_along(var.eff)) {
+            if(i > 1) {
+                fac <- if(effect$oper[[i - 1]] == "-") -1 else 1
+            } else {
+                fac <- 1
             }
-            
+            var.eff.bin[[i]] <- fac * as.integer(variables %in% var.eff[[i]])
         }
+        c0 <- as.matrix(Reduce(`+`, var.eff.bin))
+        
+        
+        # curreff <- 2
+        # for(opp in 1:length(effect$oper)) {
+        #     
+        #     if(effect$oper[[opp]] == "-") {
+        #         
+        #         resss <- symb.subtract(objective[[curreff - 1]], var.eff[[curreff]])
+        #         objective[[curreff - 1]] <- resss[[1]]
+        #         objective[[curreff]] <- resss[[2]]
+        #         curreff <- curreff + 1
+        #         
+        #     } else if(effect$oper[[opp]] == "+") {
+        #         
+        #         objective[[curreff]] <- var.eff[[curreff]]
+        #         curreff <- curreff + 1
+        #         
+        #     }
+        #     
+        # }
     }
     
     
-    
-    
-    objective.fin <- paste(objective[[1]], collapse = " + ")
-    c0 <- matrix(0, nrow = length(variables))
-    c0[match(objective[[1]], variables)] <- c0[match(objective[[1]], variables)] + 1
-    
-    if(!is.null(effect$oper) & length(effect$oper) > 0 & length(objective) > 1) {
-        
-        for(opp in 1:length(effect$oper)) {
-            
-            thiscol <- ifelse(effect$oper[[opp]] == "-", " - ", " + ")
-            objective.fin <- paste(objective.fin, effect$oper[[opp]], 
-                                   paste(objective[[opp + 1]], collapse = thiscol))
-            c0[match(objective[[opp + 1]], variables)] <- c0[match(objective[[opp + 1]], variables)] + 
-                ifelse(thiscol == " - ", -1, 1)
-            
+    negsign <- c0[, 1] < 0
+    inc <- c0[,1] != 0
+    objective.fin <- ""
+    for(i in 1:nrow(c0)){
+        if(!inc[i]) next
+        if(negsign[i]){
+            objective.fin <- paste0(objective.fin, paste(paste0("-", rep(variables[i], abs(c0[i,1]))), collapse = ""))
+        } else {
+            objective.fin <- paste0(objective.fin, paste(paste0("+", rep(variables[i], abs(c0[i,1]))), collapse = ""))
         }
         
     }
+    if(substr(objective.fin, 1, 1) == "+") objective.fin <- substr(objective.fin, 2, nchar(objective.fin))
+    
+    # objective.fin <- paste(objective[[1]], collapse = " + ")
+    # c0 <- matrix(0, nrow = length(variables))
+    # c0[match(objective[[1]], variables)] <- c0[match(objective[[1]], variables)] + 1
+    # 
+    # if(!is.null(effect$oper) & length(effect$oper) > 0 & length(objective) > 1) {
+    #     
+    #     for(opp in 1:length(effect$oper)) {
+    #         
+    #         thiscol <- ifelse(effect$oper[[opp]] == "-", " - ", " + ")
+    #         objective.fin <- paste(objective.fin, effect$oper[[opp]], 
+    #                                paste(objective[[opp + 1]], collapse = thiscol))
+    #         c0[match(objective[[opp + 1]], variables)] <- c0[match(objective[[opp + 1]], variables)] + 
+    #             ifelse(thiscol == " - ", -1, 1)
+    #         
+    #     }
+    #     
+    # }
     
     parameters <- causal_model$data$parameters
     attr(parameters, "rightvars") <- prob.form$out

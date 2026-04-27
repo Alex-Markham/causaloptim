@@ -1,3 +1,7 @@
+# causaloptim 1.0.2
+
+- Bugfix: fixed addition/subtraction of complex queries. Thanks @SinaAkbarii
+
 # causaloptim 1.0.1
 
 New features

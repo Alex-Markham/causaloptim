@@ -395,8 +395,54 @@ test_that("IV with outcome dependent sampling", {
     ost <- strsplit(c(lower = "  -1 - p011_0 - p111_0 + p001_1 + 2p111_1,\n  -1 - p001_0 - p101_0 - p011_0 - p111_0 + 2p001_1 + 2p111_1,\n  -1 + p001_0 + 2p111_0 - p011_1 - p111_1,\n  -1 + 2p001_0 + 2p111_0 - p001_1 - p101_1 - p011_1 - p111_1,\n  -1 + 2p001_0 + p111_0 - p001_1 - p101_1,\n  -1 + p001_0 + p111_0,\n  -1 + p001_1 + p111_1,\n  -1 + p001_0 + p111_1,\n  -1 + p111_0 + p001_1,\n  -1 - p001_0 - p101_0 + 2p001_1 + p111_1",
     upper = "  1 - 2p101_0 - 2p011_0 + p001_1 + p101_1 + p011_1 + p111_1,\n  1 - p101_1 - p011_1,\n  1 - p101_0 - p011_0,\n  1 + p001_0 + p101_0 + p011_0 + p111_0 - 2p101_1 - 2p011_1,\n  1 + p001_0 + p101_0 - 2p101_1 - p011_1,\n  1 - p011_0 - p101_1,\n  1 - p101_0 - 2p011_0 + p011_1 + p111_1,\n  1 - p101_0 - p011_1,\n  1 + p011_0 + p111_0 - p101_1 - 2p011_1,\n  1 - 2p101_0 - p011_0 + p001_1 + p101_1" ), ",\n")
 
-    expect_equal(setequal(bnds.ivcc$expressions$lower, ost$lower) & 
+    expect_true(setequal(bnds.ivcc$expressions$lower, ost$lower) & 
       setequal(bnds.ivcc$expressions$upper, ost$upper))
         
+})
+
+test_that("Sina's problem in different orders", {
+    
+    g <- graph_from_literal(
+        Z -+ X,
+        Ul -+ Z,
+        X -+ Y,
+        Ur -+ X,
+        Ur -+ Y
+    )
+    
+    g <- initialize_graph(g)
+    
+    V(g)$nvals[V(g)$name == "Y"] <- 3
+    V(g)$nvals[V(g)$name == "X"] <- 2
+    V(g)$nvals[V(g)$name == "Z"] <- 2
+    
+    # eff = "{Y (X = 1) = 1}"
+    
+    efftrue  <- "p{Y(X=1)=1} - p{Y(X=0)=1} + p{Y(X=1)=2} - p{Y(X=0)=2} + p{Y(X=1)=2} - p{Y(X=0)=2} " #CORRECT 52,52
+    eff1  <- "p{Y(X=1)=1} + p{Y(X=1)=2} + p{Y(X=1)=2} - p{Y(X=0)=1} - p{Y(X=0)=2} - p{Y(X=0)=2} " #ERROR
+    eff2  <- "p{Y(X=1)=1} - p{Y(X=0)=1} + p{Y(X=1)=2} + p{Y(X=1)=2} - p{Y(X=0)=2} - p{Y(X=0)=2} " #WRONG 32,32
+    
+    obj  <- analyze_graph(g, constraints = NULL, effectt = efftrue)
+    bndstrue <- optimize_effect_2(obj)
+    
+    obj1 <- analyze_graph(g, constraints = NULL, effectt = eff1)
+    bnds1 <- optimize_effect_2(obj1)
+
+    obj2 <- analyze_graph(g, constraints = NULL, effectt = eff2)
+    bnds2 <- optimize_effect_2(obj2)
+    
+    expect_true(all(bndstrue$bounds == bnds1$bounds))
+    expect_true(all(bndstrue$bounds == bnds2$bounds))
+    
+    set.seed(2605)
+    dist <- as.list(sample_distribution(obj$causal_model))
+    
+    bt <- do.call(bndstrue$bounds_function, dist)
+    b1 <- do.call(bnds1$bounds_function, dist)
+    b2 <- do.call(bnds2$bounds_function, dist)
+    
+    expect_true(abs(sum(bt - b1)) < 1e-8)
+    expect_true(abs(sum(bt - b2)) < 1e-8)
+    
 })
 

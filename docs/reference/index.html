@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">causaloptim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,7 @@
 
       <div class="section-desc"><p>Most users will only need to use this function.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -54,7 +53,8 @@
 
         </dt>
         <dd>Shiny interface to specify network structure and compute bounds</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="causaloptim-package.html">causaloptim-package</a></code> <code><a href="causaloptim-package.html">causaloptim</a></code>
 
@@ -65,8 +65,7 @@
 
       <div class="section-desc"><p>Functions for creating and interacting with the algorithm.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -77,79 +76,92 @@
 
         </dt>
         <dd>Analyze the causal graph and effect to determine constraints and objective</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="optimize_effect_2.html">optimize_effect_2()</a></code>
 
         </dt>
         <dd>Run the optimizer to obtain symbolic bounds</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="initialize_graph.html">initialize_graph()</a></code>
 
         </dt>
         <dd>Initialize an igraph object for use with causaloptim</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_causalmodel.html">create_causalmodel()</a></code>
 
         </dt>
         <dd>Create a structural causal model from a graph or a set of response functions</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_response_function.html">create_response_function()</a></code>
 
         </dt>
         <dd>Translate regular DAG to response functions</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_linearcausalproblem.html">create_linearcausalproblem()</a></code>
 
         </dt>
         <dd>Create linear causal problem from causal model and effect</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="latex_bounds.html">latex_bounds()</a></code>
 
         </dt>
         <dd>Latex bounds equations</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample_distribution.html">sample_distribution()</a></code>
 
         </dt>
         <dd>Sample a distribution of observable probabilities that satisfy the causal model</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="rdirichlet.html">rdirichlet()</a></code>
 
         </dt>
         <dd>Sample from a Dirichlet distribution</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_constraints_violated.html">check_constraints_violated()</a></code>
 
         </dt>
         <dd>Check whether any of the observable constraints implied by the causal model are violated for a given distribution of observables</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_linear_objective.html">check_linear_objective()</a></code>
 
         </dt>
         <dd>Check linearity of objective function implied by a causal model and effect</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plot.linearcausalproblem.html">plot(<i>&lt;linearcausalproblem&gt;</i>)</a></code>
 
         </dt>
         <dd>Plot the graph from the causal problem with a legend describing attributes</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="print.linearcausalproblem.html">print(<i>&lt;linearcausalproblem&gt;</i>)</a></code>
 
         </dt>
         <dd>Print the causal problem</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="print.causalmodel.html">print(<i>&lt;causalmodel&gt;</i>)</a></code>
 
@@ -160,8 +172,7 @@
 
       <div class="section-desc"><p>Internal functions and deprecated</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -172,109 +183,127 @@
 
         </dt>
         <dd>Check conditions on causal problem</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="constraintscheck.html">constraintscheck()</a></code>
 
         </dt>
         <dd>Check constraints</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_effect_vector.html">create_effect_vector()</a></code>
 
         </dt>
         <dd>Translate target effect to vector of response variables</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_q_matrix.html">create_q_matrix()</a></code>
 
         </dt>
         <dd>Translate response functions into matrix of counterfactuals</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_response_function.html">create_response_function()</a></code>
 
         </dt>
         <dd>Translate regular DAG to response functions</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="graphrescheck.html">graphrescheck()</a></code>
 
         </dt>
         <dd>Check conditions on digraph</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_default_effect.html">get_default_effect()</a></code>
 
         </dt>
         <dd>Define default effect for a given graph</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="opt_effect.html">opt_effect()</a></code>
 
         </dt>
         <dd>Compute a bound on the average causal effect</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="parse_constraints.html">parse_constraints()</a></code>
 
         </dt>
         <dd>Parse text that defines a the constraints</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="parse_effect.html">parse_effect()</a></code>
 
         </dt>
         <dd>Parse text that defines a causal effect</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plot_graphres.html">plot_graphres()</a></code>
 
         </dt>
         <dd>Plot the analyzed graph object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="querycheck.html">querycheck()</a></code>
 
         </dt>
         <dd>Check conditions on query</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="simulate_bounds.html">simulate_bounds()</a></code>
 
         </dt>
         <dd>Simulate bounds</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="btm_var.html">btm_var()</a></code>
 
         </dt>
         <dd>Recursive function to get the last name in a list</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_parents.html">check_parents()</a></code>
 
         </dt>
         <dd>Check for paths from from to to</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="find_all_paths.html">find_all_paths()</a></code>
 
         </dt>
         <dd>Find all paths in a causal model</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="interpret_bounds.html">interpret_bounds()</a></code>
 
         </dt>
         <dd>Convert bounds string to a function</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="list_to_path.html">list_to_path()</a></code>
 
         </dt>
         <dd>Recursive function to translate an effect list to a path sequence</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="update_effect.html">update_effect()</a></code>
 
@@ -290,7 +319,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

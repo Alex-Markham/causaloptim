@@ -20,10 +20,10 @@ results <- list(graphres = b, obj = obj, bounds.obs = opp,
                 boundsFunction = interpret_bounds(opp$bounds, obj$parameters))
 
 ## ----setup, eval = FALSE------------------------------------------------------
-#  library(causaloptim)
+# library(causaloptim)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  results <- specify_graph()
+# results <- specify_graph()
 
 ## -----------------------------------------------------------------------------
 names(results)

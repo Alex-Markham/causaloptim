@@ -1,0 +1,224 @@
+# Changelog
+
+## causaloptim 1.0.2
+
+- Bugfix: fixed addition/subtraction of complex queries. Thanks
+  [@SinaAkbarii](https://github.com/SinaAkbarii)
+
+## causaloptim 1.0.1
+
+New features - Add option to use rcdd::redundant to speed up calculation
+of the bounds. Note results are equivalent but the terms may be in a
+different order. - Add redundant option also to create_causalmodel
+
+## causaloptim 1.0.0
+
+CRAN release: 2024-10-17
+
+Major release with lots of changes:
+
+- Balke’s legacy C++ code is no longer supported. Vertex enumeration is
+  now always done with rcdd
+- New interface to specify a causal model without an effect. Also
+  derivation of observable constraints and checking of linearity
+- Various bug fixes and improvements
+
+## causaloptim 0.10.0
+
+- experimental functionality for automated linearity checking
+
+## causaloptim 0.9.8
+
+CRAN release: 2023-10-31
+
+- complete refactor of shiny app ([@gjo11](https://github.com/gjo11))
+- add tests for shiny ui and server components
+  ([@gjo11](https://github.com/gjo11))
+- update documentation and clean up exports
+  ([@gjo11](https://github.com/gjo11))
+
+## causaloptim 0.9.7
+
+CRAN release: 2023-03-24
+
+- More fixes to snprintf and LEN_LABEL
+- Fixed warnings from Balke’s old cpp code
+- update bibentry
+
+## causaloptim 0.9.3
+
+CRAN release: 2023-01-22
+
+- Minor bug fixes in Balke’s old code (sprintf -\> snprintf)
+- removed methods vignette and linked to published article instead (it
+  is open access, please email me if you can’t access it)
+- bugfix to ensure parameters get removed if constraints make them
+  impossible
+
+## causaloptim 0.9.2
+
+CRAN release: 2022-03-25
+
+### bug fixes
+
+- Fixed parsing issue in latex_bounds
+
+## causaloptim 0.9.2
+
+CRAN release: 2022-03-25
+
+### bug fixes
+
+- Fixed c++ compiler warning about length of buffer in Tableau.cpp
+
+## causaloptim 0.9.1
+
+CRAN release: 2021-12-10
+
+### More big new features!
+
+- categorical variables are now handled
+- Update shiny UI to enable specification of categorical variables
+- Update draft of methods paper in vignette
+
+### bug fixes
+
+- Fixed propagation of intervention sets downstream when there are
+  crossed effects
+
+## causaloptim 0.8.2
+
+CRAN release: 2021-06-09
+
+### Big new features!
+
+- Major update to the vertex enumeration algorithm (thanks to
+  [@gjo11](https://github.com/gjo11)). There is a new function called
+  `optimize_effect_2` which uses the `rcdd` package to enumerate the
+  vertices. This is significantly faster than Balke’s C++ code. This
+  function is used by default in the shiny app. There are some minor
+  differences in how the bounds are displayed, and note that the display
+  of the vertices within MIN and MAX may differ from `optimize_effect`.
+  The bounds are equivalent (just in a different order) in all of the
+  test cases that we have looked at.
+- New vignette explaining how the optimization was implemented (also
+  thanks to [@gjo11](https://github.com/gjo11))
+
+### Small features
+
+- interpret_bounds returns function that will now give a warning if
+  bounds are invalid.
+- Pull steps of analyze_graph out into separate modules.
+
+### Bugfixes
+
+- Make sure that qs are unique in large problems
+
+## causaloptim 0.7.1
+
+CRAN release: 2020-05-07
+
+### Bugfixes
+
+- Propagation of intervention set when not all paths are defined
+- Checking for violations of condition 6 in effect
+
+### New features
+
+- Additional information returned from analyze_graph
+- Better printing for analyze_graph objects
+
+## causaloptim 0.6.5
+
+CRAN release: 2020-03-25
+
+### Bugfixes
+
+- Fixed mismatched new/delete/delete\[\] in C++ code
+
+## causaloptim 0.6.4
+
+CRAN release: 2020-03-20
+
+### Bugfixes
+
+- Parse effect fixed for joint outcome probabilities.
+- Added examples
+- Update description
+
+## causaloptim 0.6.3
+
+### Bugfixes
+
+- Refactor algorithm 1 so that it works correctly for unobserved
+  variables
+- Fix probability printing in shiny app for unobserved variables
+
+## causaloptim 0.6.2
+
+### Bugfixes
+
+- Fixed repeated qs bug that affects graphs with multiple variables on
+  left side
+- Added citation file
+
+## causaloptim 0.6.1
+
+### Minor updates
+
+- Allow user interrupt in long-running c++ loops
+- Increase maximum number of vertices
+- Added progress indicator to shiny app
+- Update dependencies
+
+## causaloptim 0.6.0
+
+### New features
+
+- Allow for observed variables in the causal effect. E.g., for the
+  treatment effect among the treated
+  `p{Y(X = 1) = 1; X = 1} - p{Y(X = 0) = 1; X = 1}`
+
+## causaloptim 0.5.3
+
+### Bugfixes
+
+- Fixed warnings on CRAN check
+- Added travis ci
+- Lowercase min and max in latex
+- Additional documentation on shiny app
+
+## causaloptim 0.5.2
+
+### Bugfixes
+
+- Better reset functionality in shiny app
+
+## causaloptim 0.5.1
+
+### New features
+
+- button to print latex code in shiny app
+- Checking for intervention set children to be on rightside
+- Other error checks and bugfixes
+
+## causaloptim 0.5.0
+
+### New features
+
+- latex printing of bounds
+
+## causaloptim 0.4.1
+
+### Bug fixes
+
+- Bugfixes in parsing bounds
+- CRAN checks
+
+### New features
+
+- Error checking in parse effect and parse constraints in shiny app
+
+## causaloptim 0.3.0
+
+Rebuilt interface, text based now.
