@@ -1,5 +1,5 @@
 ---
-title: "The hyperarc encoding: direct enumeration"
+title: "Direct enumeration of the hypearc encoding"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{The hyperarc encoding: direct enumeration}
@@ -22,8 +22,8 @@ library(rcdd)
 # Introduction
 
 When a causal estimand is not identifiable, one can compute sharp bounds by
-optimising over all latent distributions compatible with the observed data.
-Sachs et al. (2023) reparameterise the causal model via *response functions*,
+optimizing over all latent distributions compatible with the observed data.
+Sachs et al. (2023) reparameterize the causal model via *response functions*,
 yielding a linear program (LP) in $|R|$ variables.
 Shridharan and Iyengar (2023) propose an alternative *hyperarc* encoding with
 $|H| \le |R|$ variables that gives the same sharp bounds.
@@ -51,8 +51,7 @@ right_vars <- names(V(g)[leftside == 0 & latent == 0])
 
 The running example is the confounded DAG below, with $V_L = \{X_1\}$ (the
 instrument), $V_R = \{X_2, X_3\}$ (outcomes), a latent common cause $U_2$ of
-$X_2$ and $X_3$, and a latent parent $U_1$ of $X_1$ (as required by the model
-class: every $V_L$ node must have a latent parent).
+$X_2$ and $X_3$, and a latent parent $U_1$ of $X_1$.
 
 ```{r dag-plot, echo=FALSE, out.width="45%", fig.cap="Confounded DAG. Dashed nodes ($U_1$, $U_2$) are latent."}
 knitr::include_graphics("confounded-dag.png")
@@ -158,8 +157,8 @@ knitr::kable(H_full_wide,
 
 The 4 invalid candidates (rows 3, 8, 9, 14) are exactly those in which $X_2$
 takes the same value for both $X_1$ inputs yet $X_3$ differs: since the
-unrealised $X_2$ value is never observed, the two Sachs response functions
-that agree on the realised $X_2$ input but disagree on the unrealised one
+unrealized $X_2$ value is never observed, the two Sachs response functions
+that agree on the realized $X_2$ input but disagree on the unrealized one
 produce identical observable distributions and collapse into a single valid
 hyperarc.
 
@@ -167,10 +166,10 @@ hyperarc.
 > Shridharan and Iyengar (2023) define a hyperarc $h$ as *valid* if
 > $R_h \neq \emptyset$ (their Definition 4) and give a local checkable
 > condition (their Theorem 5) for validity that avoids iterating over $R$.
-> To identify $H$ they iterate over all
+> $H$ can be constructed by iterating over all
 > $|\mathcal{X}_{V_R}|^{|\mathcal{X}_{V_L}|} = 4^2 = 16$ candidate maps
 > and retain those satisfying the condition.
-> In general $|\mathcal{X}_{V_R}|^{|\mathcal{X}_{V_L}|}$ can be much larger
+> In general, $|\mathcal{X}_{V_R}|^{|\mathcal{X}_{V_L}|}$ can be much larger
 > than $|R|$ (when right-side nodes depend on only a subset of $\mathcal{X}_{V_L}$),
 > so iterating over the candidate set can be costly.
 > The topological enumeration above avoids this: valid hyperarcs are built
@@ -199,7 +198,7 @@ conditional probabilities $p(X_2, X_3 \mid X_1)$, choose the objective vectors
 for the query, and call `rcdd::scdd` for vertex enumeration.
 
 The lower-bound objective selects hyperarcs under which $X_3 = 1$ is *certain*
-when $X_2 = 1$ (i.e.\ some $X_1$ value maps to $(X_2=1, X_3=1)$).
+when $X_2 = 1$ (i.e., some $X_1$ value maps to $(X_2=1, X_3=1)$).
 The upper-bound objective selects hyperarcs under which $X_3 = 0$ is *impossible*
 when $X_2 = 1$.
 These are the extreme valid coefficient assignments and yield sharp bounds.
