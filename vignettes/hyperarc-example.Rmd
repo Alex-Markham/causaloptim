@@ -2,7 +2,7 @@
 title: "Direct enumeration of the hypearc encoding"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The hyperarc encoding: direct enumeration}
+  %\VignetteIndexEntry{Direct enumeration of the hypearc encoding}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -28,22 +28,19 @@ yielding a linear program (LP) in $|R|$ variables.
 Shridharan and Iyengar (2023) propose an alternative *hyperarc* encoding with
 $|H| \le |R|$ variables that gives the same sharp bounds.
 
-This vignette accompanies Markham et al. (2026) and works through the running
-example from that paper: the binary confounded DAG with $V_L = \{X_1\}$,
-$V_R = \{X_2, X_3\}$, and an internal edge $X_2 \to X_3$.
-We enumerate $H$ directly---in topological order, without ever materialising
-$H_\text{full}$---display all 16 candidate hyperarcs (marking the 4 invalid
-ones), and verify that both encodings give the same sharp bounds.
+This vignette accompanies Markham et al. (2026) and works through the
+running example from that paper: the canonical instrumental variable
+DAG with $V_L = \{X_1\}$, $V_R = \{X_2, X_3\}$, and an internal edge
+$X_2 \to X_3$.  We enumerate $H$ directly---in topological order,
+without ever materialising $H_\text{full}$---display all 16 candidate
+hyperarcs (marking the 4 invalid ones), and verify that both encodings
+give the same sharp bounds.
 
 
 # Setup
 
 ```{r graph-setup}
-g <- graph_from_literal(X1 -+ X2, X2 -+ X3) |> initialize_graph()
-V(g)$nvals    <- 2L
-V(g)$latent   <- 0L
-V(g)$leftside <- 0L
-V(g)[name == "X1"]$leftside <- 1L
+g <- graph_from_literal(X1 -+ X2, X2 -+ X3, Ur -+ X2:X3) |> initialize_graph()
 
 left_vars  <- names(V(g)[leftside == 1 & latent == 0])
 right_vars <- names(V(g)[leftside == 0 & latent == 0])
@@ -62,10 +59,15 @@ knitr::include_graphics("confounded-dag.png")
 ```{r card-R}
 card_R <- prod(sapply(right_vars, function(j) {
   nv <- V(g)[j]$nvals
-  pa <- names(neighbors(g, j, mode = "in"))
+  pa <- setdiff(names(neighbors(g, j, mode = "in")), "Ur")
   if (length(pa) == 0) nv else nv ^ prod(V(g)[pa]$nvals)
 }))
 cat("|R| =", card_R, "\n")
+
+## or
+
+cmg <- create_causalmodel(g, prob.form = list(out = c("X2", "X3"), cond = "X1"))
+ncol(cmg$counterfactual_constraints$numeric$R)
 ```
 
 
@@ -266,17 +268,13 @@ hyp_upper <- enumerate_vertices(-Rmat, -1.0 * obj_upper, p_names)
 
 The two encodings produce the same observable polytope, so vertex enumeration
 returns the same set of linear forms in the observed probabilities.
-`optimize_effect_2` formats those linear forms into a single `MAX {...}` /
-`MIN {...}` string, so to compare element-wise we re-run vertex enumeration
-on the Sachs LP (`mod$R`, `mod$c0`) using the same `enumerate_vertices`
-helper applied to the hyperarc LP above.
+`optimize_effect_2` returns the individual vertex expressions in its
+`expressions` field, so we extract them directly for element-wise comparison.
 
 ```{r compare}
-sachs_lower <- enumerate_vertices( mod$R,        mod$c0, mod$parameters)
-sachs_upper <- enumerate_vertices(-mod$R, -1.0 * mod$c0, mod$parameters)
+sachs_lb <- sort(trimws(sachs_result$expressions$lower))
+sachs_ub <- sort(trimws(sachs_result$expressions$upper))
 
-sachs_lb <- sort(trimws(sachs_lower))
-sachs_ub <- sort(trimws(sachs_upper))
 hyp_lb   <- sort(trimws(hyp_lower))
 hyp_ub   <- sort(trimws(hyp_upper))
 
