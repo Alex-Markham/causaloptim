@@ -24,7 +24,7 @@ library(rcdd)
 When a causal estimand is not identifiable, one can compute sharp bounds by
 optimizing over all latent distributions compatible with the observed data.
 Sachs et al. (2023) reparameterize the causal model via *response functions*,
-yielding a linear program (LP) in $|R|$ variables.
+yielding a *local* encoding: a linear program (LP) in $|R|$ variables.
 Shridharan and Iyengar (2023) propose an alternative *hyperarc* encoding with
 $|H| \le |R|$ variables that gives the same sharp bounds.
 
@@ -54,7 +54,7 @@ $X_2$ and $X_3$, and a latent parent $U_1$ of $X_1$.
 knitr::include_graphics("confounded-dag.png")
 ```
 
-## Sachs encoding: $|R| = 16$
+## Local encoding: $|R| = 16$
 
 ```{r card-R}
 card_R <- prod(sapply(right_vars, function(j) {
@@ -145,28 +145,30 @@ H_full_wide <- do.call(rbind, lapply(seq_len(nrow(joint)^2), function(i) {
   x21 <- joint$X2[i1]; x31 <- joint$X3[i1]
   valid <- !(x20 == x21 && x30 != x31)
   data.frame(h = i,
-    `X2(X1=0)` = x20, `X3(X1=0)` = x30,
-    `X2(X1=1)` = x21, `X3(X1=1)` = x31,
+    `X2(X1=0)` = x20, `X2(X1=1)` = x21,
+    `X3(X1=0)` = x30, `X3(X1=1)` = x31,
     valid = if (valid) "\u2713" else "\u2717",
     check.names = FALSE)
 }))
 
 knitr::kable(H_full_wide,
-  col.names = c("h", "X2(X1=0)", "X3(X1=0)", "X2(X1=1)", "X3(X1=1)", "Valid"),
+  col.names = c("h", "X2(X1=0)", "X2(X1=1)", "X3(X1=0)", "X3(X1=1)", "Valid"),
   caption   = paste("All 16 candidate hyperarcs.",
                     "The 4 marked \u2717 are invalid (X2 constant but X3 disagrees)."))
 ```
 
 The 4 invalid candidates (rows 3, 8, 9, 14) are exactly those in which $X_2$
-takes the same value for both $X_1$ inputs yet $X_3$ differs: since the
-unrealized $X_2$ value is never observed, the two Sachs response functions
-that agree on the realized $X_2$ input but disagree on the unrealized one
-produce identical observable distributions and collapse into a single valid
-hyperarc.
+takes the same value for both $X_1$ inputs yet $X_3$ differs.
+When $X_2$ is constant, the response function value at the unrealized $X_2$
+input is observationally irrelevant: distinct elements of $R$ that disagree
+only there produce identical observable distributions.
+The local encoding still counts them as separate response functions
+(contributing 4 redundant elements to $R$), while the hyperarc encoding
+omits them, giving $|H| = 12 < |R| = 16$.
 
 > **Note on Shridharan and Iyengar's construction.**
 > Shridharan and Iyengar (2023) define a hyperarc $h$ as *valid* if
-> $R_h \neq \emptyset$ (their Definition 4) and give a local checkable
+> $R_h \neq \emptyset$ (their Definition 4) and give a locally checkable
 > condition (their Theorem 5) for validity that avoids iterating over $R$.
 > $H$ can be constructed by iterating over all
 > $|\mathcal{X}_{V_R}|^{|\mathcal{X}_{V_L}|} = 4^2 = 16$ candidate maps
@@ -184,13 +186,13 @@ Both $R$ and $H$ describe the same observable polytope, so they yield the same
 sharp bounds for any causal query.
 We verify this for $P(X_3 = 1 \mid \mathrm{do}(X_2 = 1))$.
 
-## Sachs bounds via `causaloptim`
+## Local encoding bounds via `causaloptim`
 
-```{r sachs-bounds}
+```{r local-bounds}
 mod          <- analyze_graph(g, constraints = NULL,
                               effectt = "p{X3(X2 = 1) = 1}")
-sachs_result <- optimize_effect_2(mod)
-sachs_result
+local_result <- optimize_effect_2(mod)
+local_result
 ```
 
 ## Hyperarc bounds
@@ -272,20 +274,20 @@ returns the same set of linear forms in the observed probabilities.
 `expressions` field, so we extract them directly for element-wise comparison.
 
 ```{r compare}
-sachs_lb <- sort(trimws(sachs_result$expressions$lower))
-sachs_ub <- sort(trimws(sachs_result$expressions$upper))
+local_lb <- sort(trimws(local_result$expressions$lower))
+local_ub <- sort(trimws(local_result$expressions$upper))
 
 hyp_lb   <- sort(trimws(hyp_lower))
 hyp_ub   <- sort(trimws(hyp_upper))
 
-cat("Lower-bound expressions identical:", setequal(sachs_lb, hyp_lb), "\n")
-cat("Upper-bound expressions identical:", setequal(sachs_ub, hyp_ub), "\n")
+cat("Lower-bound expressions identical:", setequal(local_lb, hyp_lb), "\n")
+cat("Upper-bound expressions identical:", setequal(local_ub, hyp_ub), "\n")
 ```
 
 The shared lower-bound expressions are:
 
 ```{r show-lower}
-cat(paste(sachs_lb, collapse = "\n"), "\n")
+cat(paste(local_lb, collapse = "\n"), "\n")
 ```
 
 That is, the sharp lower bound on $P(X_3=1\mid\mathrm{do}(X_2=1))$ is the
