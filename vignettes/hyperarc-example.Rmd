@@ -166,7 +166,7 @@ The local encoding still counts them as separate response functions
 (contributing 4 redundant elements to $R$), while the hyperarc encoding
 omits them, giving $|H| = 12 < |R| = 16$.
 
-> **Note on Shridharan and Iyengar's construction.**
+> **Note on constructing $H$.**
 > Shridharan and Iyengar (2023) define a hyperarc $h$ as *valid* if
 > $R_h \neq \emptyset$ (their Definition 4) and give a locally checkable
 > condition (their Theorem 5) for validity that avoids iterating over $R$.
