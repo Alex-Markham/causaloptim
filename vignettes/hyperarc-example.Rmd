@@ -1,8 +1,8 @@
 ---
-title: "Direct enumeration of the hypearc encoding"
+title: "Direct enumeration of the hyperarc encoding"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Direct enumeration of the hypearc encoding}
+  %\VignetteIndexEntry{Direct enumeration of the hyperarc encoding}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
